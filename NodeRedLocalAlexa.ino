@@ -4,40 +4,53 @@
 */
 
 
-#include <ArduinoJson.h>    // Biblioteca para el formato JSON
-#include <WiFi.h> // Library for WiFi managment of the ESP-32
+#include <ArduinoJson.h>    // To handle the needed classes for the JSON Format
+#include <WiFi.h>           // Library for WiFi managment of the ESP-32
+#include <PubSubClient.h>   // library to handle the needed MQTT classes
 #include <secrets.h>
-#include <PubSubClient.h>   //Biblioteca para el manejo del protocolo MQTT
 
  
-// **********************PWM PROPERTIES**************************************************************
+// ********************** PWM Channels Configuration**************************************************************
 
-const int ledPin = 21;  // 21, 22, 33 ,32Defect. corresponds to GPIO22
+// We are going to be using 4 different output channels in our module to control 4 different set of LED´s
+
+const int ledOut1 = 21;  
+const int ledOut2 = 22;
+const int ledOut3 = 33;
+const int ledOut4 = 34;
+
 // Chanel 0
-
 const int freq = 6000;
-const int ledChannel = 0;
+const int ledChannel0 = 0;
 const int resolution = 8;
 
 // Chanel 1
-//const int freq = 6000;
-//const int ledChannel = 1;
-//const int resolution = 8; 
+const int freq = 6000;
+const int ledChannel1 = 1;
+const int resolution = 8; 
+
+// Chanel 2
+const int freq = 6000;
+const int ledChannel2 = 2;
+const int resolution = 8; 
+
+// Chanel 3
+const int freq = 6000;
+const int ledChannel3 = 3;
+const int resolution = 8; 
+
+// *****************************************************************************************************
 
 
-
-int lastBright = 0;
-
-
-char ssid[] = SECRET_SSID;   // your network SSID (name) 
-char pass[] = SECRET_PASS;   // your network password
-const char* mqtt_server = ""; // the MQTT IP
+char ssid[] = SECRET_SSID;     // The network SSID (name) 
+char pass[] = SECRET_PASS;     // The network password
+const char* mqtt_server = "";  // the MQTT Broker IP
 
 
 WiFiClient espClient2;               // Crea una instancia tipo WifiCliente llamado espClient
 PubSubClient client(espClient2);     //Gestiona la Biblioteca de publicación-subscripción para el cliente creado
 
-
+int lastBright = 0;
 bool flag=false;
 long lastMsg = 0;                   // Declaración de variable para conteo de tiempo de transmisión de mensaje
 char msg[50];                       // Decalaración de buffer para guardar el mensaje recibido
@@ -48,14 +61,15 @@ int gi = 0;                         //Declaración de variable int  para configu
 static char buffer2[6];             //Declaración de variables para almacenar caracteres
 char rec[50];                       //Declaración de varible auxiliar para la recepción de mensajes
 
+
 void setup() {
 
-// ************************************PWM SETUP**************************************************************  
-  // configure LED PWM functionalitites
-  ledcSetup(ledChannel, freq, resolution);
+// ************************************ PWM SETUP **************************************************************  
+  // configure LED PWM functionalitites for the cha
+  ledcSetup(ledChannel0, freq, resolution);
   
   // attach the channel to the GPIO to be controlled
-  ledcAttachPin(ledPin, ledChannel);
+  ledcAttachPin(ledOut1, ledChannel0);
 
 //************************************************************************************************************
   Serial.begin(115200);                    //Inicializa la comunicación serial a una velocidad de 115200
