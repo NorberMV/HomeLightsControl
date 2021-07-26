@@ -1,6 +1,7 @@
 /*
   IoT system using MQTT protocol to control the  module build by Signal2 that has embedded a ESP32 board within
-  and uses four independent PWM channels for light control that allows dimm  the lights from 0 to 100%
+  and uses four independent PWM channels for light control that allows dimm  the lights from 0 to 100%.
+  Author: Norberto Moreno Velez
 */
 
 
